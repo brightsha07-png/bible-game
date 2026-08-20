@@ -487,4 +487,88 @@ const questions = [
     let currentQuestion = 0;
 let score = 0;
 
-const questionElement = document.getElementByI
+const questionElement = document.getElementById("question");
+const answersElement = document.getElementById("answers");
+const nextButton = document.getElementById("next-btn");
+const scoreElement = document.getElementById("score");
+const progressElement = document.getElementById("progress");
+
+const quizContainer = document.getElementById("quiz-container");
+const resultElement = document.getElementById("result");
+const finalScoreElement = document.getElementById("final-score");
+const restartButton = document.getElementById("restart-btn");
+const feedbackElement = document.getElementById("feedback");
+
+function showQuestion() {
+    const current = questions[currentQuestion];
+
+    progressElement.textContent =
+        "Question " + (currentQuestion + 1) + " of " + questions.length;
+
+    questionElement.textContent = current.question;
+
+    answersElement.innerHTML = "";
+    feedbackElement.textContent = "";
+
+    current.answers.forEach(function(answer) {
+        const button = document.createElement("button");
+
+        button.textContent = answer;
+
+        button.onclick = function() {
+
+    if (answer === current.correct) {
+
+        score++;
+
+        scoreElement.textContent = "Score: " + score;
+
+        feedbackElement.textContent = "Correct! 🎉";
+
+    } else {
+
+        feedbackElement.textContent = "Wrong answer! ❌";
+    }
+
+    const allButtons = answersElement.querySelectorAll("button");
+
+    allButtons.forEach(function(btn) {
+        btn.disabled = true;
+    });
+
+};
+        answersElement.appendChild(button);
+    });
+}
+
+showQuestion();
+
+nextButton.onclick = function() {
+
+    if (currentQuestion < questions.length - 1) {
+
+        currentQuestion++;
+        showQuestion();
+
+    } else {
+
+        quizContainer.style.display = "none";
+        resultElement.style.display = "block";
+
+        finalScoreElement.textContent =
+            "Your final score is " + score + " out of " + questions.length;
+    }
+};
+
+restartButton.onclick = function() {
+
+    currentQuestion = 0;
+    score = 0;
+
+    scoreElement.textContent = "Score: 0";
+
+    resultElement.style.display = "none";
+    quizContainer.style.display = "block";
+
+    showQuestion();
+};
